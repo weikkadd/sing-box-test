@@ -1,0 +1,10 @@
+# 本项目面向 Linux（bash / node / python / java），统一 LF 换行
+* text=auto eol=lf
+*.sh text eol=lf
+*.js text eol=lf
+*.py text eol=lf
+*.go text eol=lf
+*.mod text eol=lf
+*.md text eol=lf
+*.jar binary
+*.zip binary
