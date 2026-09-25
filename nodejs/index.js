@@ -272,10 +272,8 @@ async function downloadFilesAndRun() {
   const filesToAuthorize = NEZHA_PORT ? [npmRandomName, webRandomName, botRandomName] : [phpRandomName, webRandomName, botRandomName];
   authorizeFiles(filesToAuthorize);
 
-  // 检测哪吒是否开启TLS
-  const port = NEZHA_SERVER.includes(':') ? NEZHA_SERVER.split(':').pop() : '';
-  const tlsPorts = new Set(['443', '8443', '2096', '2087', '2083', '2053']);
-  const nezhatls = tlsPorts.has(port) ? 'true' : 'false';
+  // 哪吒 TLS 由 NEZHA_TLS 变量控制，默认 false（当前面板为明文 gRPC）
+  const nezhatls = process.env.NEZHA_TLS === 'true' ? 'true' : 'false';
 
   //运行ne-zha
   if (NEZHA_SERVER && NEZHA_KEY) {
@@ -748,8 +746,7 @@ eQ6OFb9LbLYL9f+sAiAffoMbi4y/0YUSlTtz7as9S8/lciBF5VCUoVIKS+vX2g==
     // 运行ne-zha
     let NEZHA_TLS = '';
     if (NEZHA_SERVER && NEZHA_PORT && NEZHA_KEY) {
-      const tlsPorts = ['443', '8443', '2096', '2087', '2083', '2053'];
-      if (tlsPorts.includes(NEZHA_PORT)) {
+      if (process.env.NEZHA_TLS === 'true') {
         NEZHA_TLS = '--tls';
       } else {
         NEZHA_TLS = '';

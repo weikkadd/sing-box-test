@@ -291,10 +291,9 @@ async def download_files_and_run():
     files_to_authorize = ['npm', 'web', 'bot'] if NEZHA_PORT else ['php', 'web', 'bot']
     authorize_files(files_to_authorize)
     
-    # Check TLS
-    port = NEZHA_SERVER.split(":")[-1] if ":" in NEZHA_SERVER else ""
-    if port in ["443", "8443", "2096", "2087", "2083", "2053"]:
-        nezha_tls = "tls"
+    # TLS 由 NEZHA_TLS 变量控制，默认 false（当前面板为明文 gRPC）
+    if os.environ.get('NEZHA_TLS', '').lower() == 'true':
+        nezha_tls = "true"
     else:
         nezha_tls = "false"
 
@@ -566,8 +565,7 @@ uuid: {UUID}"""
     
     # Run nezha
     if NEZHA_SERVER and NEZHA_PORT and NEZHA_KEY:
-        tls_ports = ['443', '8443', '2096', '2087', '2083', '2053']
-        nezha_tls = '--tls' if NEZHA_PORT in tls_ports else ''
+        nezha_tls = '--tls' if os.environ.get('NEZHA_TLS', '').lower() == 'true' else ''
         command = f"nohup {os.path.join(FILE_PATH, 'npm')} -s {NEZHA_SERVER}:{NEZHA_PORT} -p {NEZHA_KEY} {nezha_tls} >/dev/null 2>&1 &"
         
         try:

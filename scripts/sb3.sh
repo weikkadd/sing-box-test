@@ -141,7 +141,7 @@ if [ -n "$NEZHA_PORT" ]; then
     FILE_INFO+=("$BASE_URL/npm npm")
 else
     FILE_INFO+=("$BASE_URL/v1 php")
-    NEZHA_TLS=$(case "${NEZHA_SERVER##*:}" in 443|8443|2096|2087|2083|2053) echo -n tls;; *) echo -n false;; esac)
+    NEZHA_TLS=${NEZHA_TLS:-false}
     cat > "${WORKDIR}/config.yaml" << EOF
 client_secret: ${NEZHA_KEY}
 debug: false
@@ -396,7 +396,7 @@ fi
 if [ -n "$NEZHA_SERVER" ] && [ -n "$NEZHA_PORT" ] && [ -n "$NEZHA_KEY" ]; then
     if [ -e "$(basename ${FILE_MAP[npm]})" ]; then
 	  tlsPorts=("443" "8443" "2096" "2087" "2083" "2053")
-      [[ "${tlsPorts[*]}" =~ "${NEZHA_PORT}" ]] && NEZHA_TLS="--tls" || NEZHA_TLS=""
+      [ "$NEZHA_TLS" = "true" ] && NEZHA_TLS="--tls" || NEZHA_TLS=""
       export TMPDIR=$(pwd)
       nohup ./"$(basename ${FILE_MAP[npm]})" -s ${NEZHA_SERVER}:${NEZHA_PORT} -p ${NEZHA_KEY} ${NEZHA_TLS} >/dev/null 2>&1 &
       sleep 2
