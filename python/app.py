@@ -8,6 +8,11 @@ import asyncio
 import requests
 import platform
 import subprocess
+
+# 静默模式：默认不在面板日志输出运行信息；需要排查时设置环境变量 DEBUG=true
+import builtins
+if os.environ.get('DEBUG', '') != 'true':
+    builtins.print = lambda *a, **k: None
 import threading
 from threading import Thread
 from dotenv import load_dotenv

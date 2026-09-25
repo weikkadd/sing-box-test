@@ -19,8 +19,11 @@ func main() {
 
 	cmd := exec.Command("bash", "-c", shellCommand)
 
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	// 静默模式：默认不在面板日志输出运行信息；需要排查时设置环境变量 DEBUG=true
+	if os.Getenv("DEBUG") == "true" {
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+	}
 
 	err := cmd.Run()
 	if err != nil {
